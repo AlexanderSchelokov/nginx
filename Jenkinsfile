@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build('146587/nginx', '.')
+                    def docker = docker.build('146587/nginx', '.')
                     dockerImage.push()
                 }
             }
