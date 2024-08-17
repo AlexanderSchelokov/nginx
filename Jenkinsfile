@@ -1,7 +1,7 @@
 pipeline {
   environment {
     dockerimagename = "146587/nginx"
-    dockerImage = ""
+    dockerImage = "nginx"
     
   }
   agent any
