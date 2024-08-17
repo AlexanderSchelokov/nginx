@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         dockerimagename = "146587/nginx"
+		registryCredential = "dockerhub"
     }
     stages {
         stage('Checkout') {
