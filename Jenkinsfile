@@ -16,10 +16,6 @@ pipeline {
                 }
             }
         }
-        stage('Pushing Image:tags') {
-            environment {
-                registryCredential = 'dockerhub-credentials'
-            }
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/146587/', registryCredential) {
