@@ -3,7 +3,6 @@ pipeline {
     stages {
         stage('Initialize') {
             steps {
-                script {
                     def dockerHome = tool 'myDocker'
                     withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
                     sh 'echo $PATH'
@@ -31,5 +30,4 @@ pipeline {
             }
         }
     }
-}
 }
