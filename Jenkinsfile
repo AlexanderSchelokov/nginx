@@ -1,4 +1,8 @@
 pipeline {
+    environment {
+        DOCKER_USERNAME = credentials('146587')
+        DOCKER_PASSWORD = credentials('As146587+3')
+    }
     agent any
     stages {
         stage('Checkout') {
@@ -9,6 +13,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                     def dockerImage = docker.build('146587/nginx', '.')
                     dockerImage.push()
                 }
