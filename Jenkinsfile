@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         dockerimagename = "146587/nginx"
-		registryCredential = "dockerhub"
+        registryCredential = "dockerhub"
     }
     stages {
         stage('Checkout') {
@@ -14,11 +14,6 @@ pipeline {
             steps {
                 script {
                     dockerImage = docker.build dockerimagename
-                }
-            }
-        }
-            steps {
-                script {
                     docker.withRegistry('https://index.docker.io/146587/', registryCredential) {
                         dockerImage.push()
                     }
@@ -33,3 +28,4 @@ pipeline {
             }
         }
     }
+}
