@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/146587/', registryCredential) {
-                        dockerImage.push("${gitTag}")
+                        dockerImage.push()
                     }
                 }
             }
