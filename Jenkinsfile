@@ -1,8 +1,6 @@
 pipeline {
-    environment {
-        DOCKER_USERNAME = credentials("146587")
-        DOCKER_PASSWORD = credentials("As146587+3")
-    }
+  environment {
+    dockerimagename = "146587/nginx"
     agent any
     stages {
         stage('Checkout') {
@@ -10,15 +8,25 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
-                    def dockerImage = docker.build('146587/nginx', '.')
-                    dockerImage.push()
-                }
-            }
+        stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build dockerimagename
         }
+      }
+    }
+    stage('Pushing Image:tags') {
+      environment {
+               registryCredential = 'dockerhub-credentials'
+           }
+      steps{
+        script {
+          docker.withRegistry( 'https://index.docker.io/146587/', registryCredential ) {
+            dockerImage.push("${gitTag}")
+          }
+        }
+      }
+    }
         stage('Update Kubernetes Deployment') {
             steps {
                 script {
