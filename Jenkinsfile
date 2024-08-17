@@ -6,16 +6,6 @@ pipeline {
                 checkout scm
             }
         }
-    stage('Check Image Details') {
-        steps {
-            script {
-                def imageDetails = docker.inspect('146587/nginx')
-                echo "Image ID: ${imageDetails.Id}"
-                echo "Image Created: ${imageDetails.Created}"
-        }
-    }
-}
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -24,7 +14,6 @@ pipeline {
                 }
             }
         }
-
         stage('Update Kubernetes Deployment') {
             steps {
                 script {
