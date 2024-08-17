@@ -7,13 +7,11 @@ pipeline {
                 env.PATH = "${dockerHome}/bin:${env.PATH}"
             }
         }
-    stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -22,7 +20,6 @@ pipeline {
                 }
             }
         }
-
         stage('Update Kubernetes Deployment') {
             steps {
                 script {
