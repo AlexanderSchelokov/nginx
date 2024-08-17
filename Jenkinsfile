@@ -1,7 +1,7 @@
 pipeline {
   environment {
     dockerimagename = "146587/nginx"
-    dockerImage = "null"
+    dockerImage = ""
     
   }
   agent any
@@ -39,23 +39,10 @@ pipeline {
         }
       }
     }
-    stage('sed env') {
-      environment {
-              envTag = ("${gitTag}")
-           }    
-      steps{
-        script {
-          sh "sed -i \'18,22 s/gitTag/\'$envTag\'/g\' myapp-deploy.yml"
-          sh 'cat myapp-deploy.yml'
-        }
-      }
+    stage('Restart Kubernetes Cluster') {
+  steps {
+    script {
+      sh 'kubectl rollout restart deployment/default -n'
     }
-    stage('Deploying myapp-deploy to Kubernetes') {
-      steps {
-        script {
-          kubernetesDeploy (configs:'myapp-deploy.yml', kubeconfigId:'k8s-credentials' )
-        }
-      }
-    }
-  }    
-}    
+  }
+}
