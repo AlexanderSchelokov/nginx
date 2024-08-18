@@ -32,7 +32,7 @@ pipeline {
     stage('Update Kubernetes Deployment') {
       steps {
         script {
-          sh 'kubectl rollout restart deployment nginx-static'
+          sh 'sudo kubectl rollout restart deployment nginx-static'
         }
       }
     }
