@@ -11,7 +11,7 @@ pipeline {
       }
     }
     stage('Build image') {
-      steps{
+      steps {
         script {
           dockerImage = docker.build dockerimagename
         }
@@ -19,21 +19,22 @@ pipeline {
     }
     stage('Pushing Image') {
       environment {
-               registryCredential = 'dockerhub'
-           }
-      steps{
+        registryCredential = 'dockerhub'
+      }
+      steps {
         script {
-          docker.withRegistry( 'https://index.docker.io/v1/', registryCredential ) {
+          docker.withRegistry('https://index.docker.io/v1/', registryCredential) {
             dockerImage.push("latest")
           }
         }
       }
     }
-     stage('Update Kubernetes Deployment') {
-       steps {
+    stage('Update Kubernetes Deployment') {
+      steps {
         script {
-            sh 'kubectl set image deployment/default nginx=146587/nginx'
-                }
-            }
+          sh 'kubectl set image deployment/nginx-static nginx-static=146587/nginx:latest'
+        }
+      }
+    }
   }
 }
