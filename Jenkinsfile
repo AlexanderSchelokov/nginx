@@ -1,31 +1,33 @@
 pipeline {
-    agent any
-    environment {
-        dockerimagename = "146587/nginx"
-        registryCredential = credentials("dockerhub")
+  environment {
+    dockerimagename = "146587/nginx"
+    dockerImage = ""
+  }
+  agent any
+  stages {
+    stage('Checkout Source') {
+      steps {
+        git branch: 'main', url: 'https://github.com/AlexanderSchelokov/nginx.git'
+      }
     }
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+    stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build dockerimagename
         }
-        stage('Build image') {
-            steps {
-                script {
-                    dockerImage = docker.build dockerimagename
-                    docker.withRegistry('https://index.docker.io/146587/', registryCredential) {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-        stage('Update Kubernetes Deployment') {
-            steps {
-                script {
-                    sh 'kubectl set image deployment/default nginx=146587/nginx'
-                }
-            }
-        }
+      }
     }
+    stage('Pushing Image') {
+      environment {
+               registryCredential = 'dockerhub'
+           }
+      steps{
+        script {
+          docker.withRegistry( 'https://index.docker.io/v1/', registryCredential ) {
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+  }
 }
