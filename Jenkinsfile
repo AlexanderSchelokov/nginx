@@ -32,7 +32,7 @@ pipeline {
     stage('Update Kubernetes Deployment') {
       steps {
         script {
-          sh 'kubeconfigId:k8s-credentials kubectl rollout restart deployment nginx-static'
+          sh 'kubeconfigId: ~/.kube/config kubectl rollout restart deployment nginx-static'
         }
       }
     }
