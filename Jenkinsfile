@@ -29,10 +29,11 @@ pipeline {
         }
       }
     }
-    stage('Update Kubernetes Deployment') {
-      steps {
-        script {
-          sh 'kubectl rollout restart deployment nginx-static'
+    stage('Apply Kubernetes files') {
+        withKubeConfig([
+            credentialsId: 'k8s-credentials',
+            serverUrl: 'https://127.0.0.1:6443 ]) {
+            sh 'kubectl rollout restart deployment nginx-static'
         }
       }
     }
