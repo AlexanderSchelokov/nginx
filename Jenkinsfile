@@ -29,5 +29,11 @@ pipeline {
         }
       }
     }
+     stage('Update Kubernetes Deployment') {
+       steps {
+        script {
+            sh 'kubectl set image deployment/default nginx=146587/nginx'
+                }
+            }
   }
 }
